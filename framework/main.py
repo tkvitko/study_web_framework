@@ -42,9 +42,9 @@ class Framework:
             view = PageNotFound404()
 
         # Front Controller pattern
-        request = {}
-        for front in self.fronts_list:
-            front(request)
+        # request = {}
+        # for front in self.fronts_list:
+        #     front(request)
 
         # start controller for request
         code, body = view(request)
