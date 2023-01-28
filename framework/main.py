@@ -38,6 +38,7 @@ class Framework:
         # Page Controller pattern
         if path in self.routes_list:
             view = self.routes_list[path]
+            print(view)
         else:
             view = PageNotFound404()
 

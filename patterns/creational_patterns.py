@@ -1,11 +1,13 @@
 import os
 from copy import deepcopy
 from quopri import decodestring
+from patterns.behavioral_patterns import FileWriter, Subject
 
 
 class User:
     """abstract user"""
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 class Teacher(User):
@@ -15,7 +17,9 @@ class Teacher(User):
 
 class Student(User):
     """student"""
-    pass
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 
 class Staff(User):
@@ -33,8 +37,8 @@ class UserFactory:
     }
 
     @classmethod
-    def create(cls, type_):
-        return cls.types[type_]()
+    def create(cls, type_, name):
+        return cls.types[type_](name)
 
 
 class CoursePrototype:
@@ -45,13 +49,23 @@ class CoursePrototype:
         return deepcopy(self)
 
 
-class Course(CoursePrototype):
+class Course(CoursePrototype, Subject):
     """Course based on prototype"""
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.courses.append(self)
+        self.students = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student: Student):
+        self.students.append(student)
+        student.courses.append(self)
+        self.notify()
 
 
 class InteractiveCourse(Course):
@@ -106,8 +120,8 @@ class Engine:
         self.categories = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name: str, category=None):
@@ -129,6 +143,17 @@ class Engine:
             if item.name == name:
                 return item
         raise Exception(f'No course with name={name}')
+
+    def get_student(self, name) -> Student:
+        for item in self.students:
+            if item.name == name:
+                return item
+
+    def get_course(self, name):
+        for item in self.courses:
+            if item.name == name:
+                return item
+        return None
 
     @staticmethod
     def decode_value(val):
@@ -160,10 +185,10 @@ class SingletonByName(type):
 class Logger(metaclass=SingletonByName):
     """Logger"""
 
-    def __init__(self, name):
+    def __init__(self, name, writer=FileWriter()):
         self.name = name
+        self.writer = writer
 
-    @staticmethod
-    def log(text):
-        with open(os.path.join('logs', 'log.txt'), 'a', encoding='utf-8') as f:
-            f.write(f'{text}\n')
+    def log(self, text):
+        text = f'log---> {text}'
+        self.writer.write(text)

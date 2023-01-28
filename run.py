@@ -1,7 +1,8 @@
 from wsgiref.simple_server import make_server
 
 from framework.main import Framework
-from urls import routes, fronts
+from urls import fronts
+from patterns.structural_patterns import routes
 
 
 if __name__ == '__main__':

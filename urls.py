@@ -14,13 +14,4 @@ from views import Index, Contact, Courses, CreateCategory, CoursesList, CreateCo
 #
 # fronts = [date_adding, other_front]
 fronts = []
-
-routes = {
-    '/': Index(),
-    '/contact/': Contact(),
-    '/courses/': Courses(),
-    '/create-category/': CreateCategory(),
-    '/courses-list/': CoursesList(),
-    '/create-course/': CreateCourse(),
-    '/copy-course/': CopyCourse()
-}
+routes = {}
