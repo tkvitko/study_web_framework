@@ -1,3 +1,5 @@
+import os
+
 from jsonpickle import dumps, loads
 from framework.templator import render
 
@@ -118,7 +120,7 @@ class FileWriter:
     """behavior pattern Strategy"""
 
     def __init__(self):
-        self.file_name = 'log.txt'
+        self.file_name = os.path.join('logs', 'log.txt')
 
     def write(self, text):
         with open(self.file_name, 'a', encoding='utf-8') as f:
