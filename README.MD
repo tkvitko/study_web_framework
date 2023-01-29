@@ -6,6 +6,8 @@ during GeekBrains "Design Patterns" cource.
 
 ### Installation
 ``pip install -r requirements.txt``
+<br>
+``python utils.create_db.py``
 
 ### Start
 ``python run.py``
